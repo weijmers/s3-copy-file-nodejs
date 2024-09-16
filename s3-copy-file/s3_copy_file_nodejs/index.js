@@ -1,35 +1,11 @@
 #!/usr/bin/env node
 import { register, next } from "./extensions-api.js";
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
-import fs from "fs";
+import { copy } from "./copy_s3_file.js"
 
 const EventType = {
   INVOKE: 'INVOKE',
   SHUTDOWN: 'SHUTDOWN',
 };
-
-const client = new S3Client();
-
-async function readBytes(stream) {
-  const chunks = [];
-  for await (const chunk of stream) {
-    chunks.push(chunk);
-  }
-  return Buffer.concat(chunks);
-}
-
-async function fetchS3File(bucket, key) {
-  const command = new GetObjectCommand({ Bucket: bucket, Key: key });
-
-  try {
-    const response = await client.send(command);
-    const data = await readBytes(response.Body);
-    const localFilePath = `/tmp/${process.env.S3_KEY}`;
-    fs.writeFileSync(localFilePath, data);
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 async function handleShutdown(event) {
   console.log(JSON.stringify(event));
@@ -47,7 +23,7 @@ async function handleInvoke(event) {}
   const extensionId = await register();
   
   console.log("fetch file ...");
-  await fetchS3File(process.env.S3_BUCKET, process.env.S3_KEY)
+  await copy(process.env.S3_BUCKET, process.env.S3_KEY)
 
   while (true) {
     const event = await next(extensionId);

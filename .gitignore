@@ -1,0 +1,5 @@
+# nodejs dependencies
+node_modules
+
+# aws sam build files
+.aws-sam

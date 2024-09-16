@@ -1,8 +1,8 @@
 import fs from "fs";
 
 export const handler = async (event) => {
-  const files1 = fs.readdirSync("/tmp/");
-  console.log("Files in folder ...:", files1);
+  const files = fs.readdirSync("/tmp/");
+  console.log("Files in folder ...:", files);
   
   return {
     statusCode: 200,

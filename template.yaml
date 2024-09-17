@@ -7,7 +7,6 @@ Resources:
       LayerName: s3_copy_file_nodejs
       ContentUri: .
       CompatibleRuntimes:
-        # - nodejs16.x
         - nodejs18.x
         - nodejs20.x
       RetentionPolicy: Retain
@@ -23,8 +22,6 @@ Resources:
       CodeUri: ./testing-lambda-extension
       Timeout: 10
       Layers:
-        # - arn:aws:lambda:eu-north-1:663056784065:layer:nodejs-example-extension:3
-        # - arn:aws:lambda:eu-north-1:663056784065:layer:test_test:1  
         - !Ref S3CopyFile
       Environment:
         Variables:
